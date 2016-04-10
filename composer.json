@@ -1,0 +1,16 @@
+{
+  "name": "visay/dockerwordpress",
+  "description": "Docker Compose structure to quickly startup Wordpress projects",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Visay Keo",
+      "email": "keo@visay.info",
+      "homepage": "http://www.visay.info",
+      "role": "Developer"
+    }
+  ],
+  "bin": [
+    "bin/dockerwordpress"
+  ]
+}

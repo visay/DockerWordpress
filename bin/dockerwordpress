@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# Check if docker and docker-compose are installed
+command -v docker >/dev/null 2>&1 || { echo "docker is not installed. Aborting." >&2; exit 1; }
+command -v docker-compose >/dev/null 2>&1 || { echo "docker-compose is not installed. Aborting." >&2; exit 1; }
+
+dirname=`pwd`
+package_dir="vendor/visay/dockerwordpress"
+config_dir="${package_dir}/config"
+
+action=$1
+
+# Generate project name from folder name
+projectname=${PWD##*/}
+projectname=`echo ${projectname// /_}`
+projectname=`echo ${projectname} | tr '[A-Z]' '[a-z]'`
+
+# Wrap docker-compose command to use config from package
+wrapped_command="docker-compose -p \"${projectname}\" -f ${package_dir}/docker-compose.yml"
+
+# Use the projects folder name as servername
+DOCKER_WORDPRESS_SERVERNAME=${projectname}
+
+# Use Development context if Wordpress Context is not set
+DOCKER_WORDPRESS_CONTEXT=${WORDPRESS_CONTEXT:=Development}
+
+# Replace the markers in the merge config file
+sed -e "s/DOCKER_WORDPRESS_SERVERNAME/test.${DOCKER_WORDPRESS_SERVERNAME}/g;s/DOCKER_WORDPRESS_CONTEXT/${DOCKER_WORDPRESS_CONTEXT}\/Testing/g" ${config_dir}/web/nginx_vhost.conf > ${config_dir}/web/nginx_vhost_merged.conf
+sed -e "s/DOCKER_WORDPRESS_SERVERNAME/${DOCKER_WORDPRESS_SERVERNAME} *.${DOCKER_WORDPRESS_SERVERNAME}/g;s/DOCKER_WORDPRESS_CONTEXT/${DOCKER_WORDPRESS_CONTEXT}/g" ${config_dir}/web/nginx_vhost.conf >> ${config_dir}/web/nginx_vhost_merged.conf
+
+# Make sure all entrypoint scripts are executable
+chmod +x ${package_dir}/scripts/entrypoint/*.sh
+
+# Create placeholder for storing web ip
+touch ${config_dir}/web/ip_address.txt
+
+echo "####"
+echo "### Project name      : ${projectname}"
+echo "### WORDPRESS_CONTEXT : ${DOCKER_WORDPRESS_CONTEXT}"
+echo "### Testing context   : ${DOCKER_WORDPRESS_CONTEXT}/Testing"
+echo "###"
+echo "### DockerWordpress is now running action '${action}'"
+echo "####"
+
+# Wrap docker-compose command to use config from package, passing Wordpress context on run action
+if [ "$action" = "run" ]; then
+	${wrapped_command} $1 --rm -e WORDPRESS_CONTEXT=${DOCKER_WORDPRESS_CONTEXT} ${*:2}
+else
+	${wrapped_command} $*
+fi
+
+if [ "$action" = "up" ]; then
+	# Get ip address of web container, store in ip_address.txt file and send it to app container
+	${wrapped_command} run --rm -e PROJECT_NAME=${projectname} web /entrypoint.sh
+	${wrapped_command} run --rm app /entrypoint.sh
+
+	# Print information about running app container
+	echo "####"
+	echo "### Done! Your app is running here  : http://${projectname}/"
+	echo "### Testing context is running here : http://test.${projectname}/"
+	echo "####"
+fi

@@ -1,0 +1,5 @@
+.git
+.gitignore
+composer.json
+docker-compose.yml
+bin
