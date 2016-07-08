@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.0.0
+-----
+
+  - [FEATURE] Support for mac docker with volume ownership
+
 0.0.2
 -----
 
