@@ -152,6 +152,27 @@ With this you can work in a running container instead of creating a new one.
 
     vendor/bin/dockerwordpress run SERVICE netstat --listen
 
+## Wordpress CLI included
+
+From v1.0.1 we support the Wordpress CLI. The installation of Wordpress CLI must be done on your composer level.
+Your Wordpress composer should look like:
+
+```
+	"require": {
+		"wp-cli/wp-cli" : "~1.1"
+	},
+```
+
+In order to execute Wordpress CLI command first to need to access to the App container
+
+```
+vendor/bin/dockerwordpress run app /bin/bash
+# check the WP CLI
+wp --info
+```
+
+More detail about [Worpress CLI](http://wp-cli.org/)
+
 # Further reading
 
 * [blog post on php-fpm](http://mattiasgeniar.be/2014/04/09/a-better-way-to-run-php-fpm/)
