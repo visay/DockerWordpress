@@ -12,13 +12,13 @@ Contributions and feedback are very welcomed.
 
 ## Install docker
 
-    https://docs.docker.com/installation/ (tested with docker v1.10)
+    https://docs.docker.com/installation/ (tested with docker v17.03)
 
 ## Install docker-compose
 
 We use docker-compose to do all the automatic configuration:
 
-    http://docs.docker.com/compose/install/ (tested with docker-compose v1.5)
+    http://docs.docker.com/compose/install/ (tested with docker-compose v1.12)
 
 The repository contains a Dockerfile which will automatically be built in the
 [docker hub](https://registry.hub.docker.com/u/visay/dockerwordpress/) after each change and used by docker-compose
@@ -154,8 +154,8 @@ With this you can work in a running container instead of creating a new one.
 
 ## Wordpress CLI included
 
-From v1.0.1 we support the Wordpress CLI. The installation of Wordpress CLI must be done on your composer level.
-Your Wordpress composer should look like:
+From v1.0.1 we support the WordPress CLI. The installation of WordPress CLI must be done on your composer level.
+Your WordPress composer should look like:
 
 ```
 	"require": {
@@ -163,7 +163,7 @@ Your Wordpress composer should look like:
 	},
 ```
 
-In order to execute Wordpress CLI command first to need to access to the App container
+In order to execute WordPress CLI command first to need to access to the App container
 
 ```
 vendor/bin/dockerwordpress run app /bin/bash
@@ -176,6 +176,5 @@ More detail about [Worpress CLI](http://wp-cli.org/)
 # Further reading
 
 * [blog post on php-fpm](http://mattiasgeniar.be/2014/04/09/a-better-way-to-run-php-fpm/)
-* [nginx+php-fpm+mysql tutorial](http://www.lonelycoder.be/nginx-php-fpm-mysql-phpmyadmin-on-ubuntu-12-04/)
 * [Docker documentation](http://docs.docker.com/reference/builder/)
 * [docker-compose documentation](http://docs.docker.com/compose)
