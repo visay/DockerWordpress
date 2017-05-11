@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.1.0
+-----
+
+  - [FEATURE] Build app container with php 7.0 support
+
 1.0.1
 -----
 

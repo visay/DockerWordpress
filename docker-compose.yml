@@ -2,7 +2,7 @@
 app:
   # For development of the image comment out the 'image' line and replace with the next line
   #build: .
-  image: visay/dockerwordpress:1.0.0
+  image: visay/dockerwordpress:1.1.0
   hostname: dockerwordpress
   domainname: dev
   volumes_from:
